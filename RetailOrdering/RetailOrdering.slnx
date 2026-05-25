@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="RetailOrdering.Application/RetailOrdering.Application.csproj" />
+  <Project Path="RetailOrdering.Domain/RetailOrdering.Domain.csproj" />
+  <Project Path="RetailOrdering.Infrastructure/RetailOrdering.Infrastructure.csproj" />
+  <Project Path="RetailOrdering.WebAPI/RetailOrdering.WebAPI.csproj" />
+</Solution>

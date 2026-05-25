@@ -1,0 +1,97 @@
+# ====================================================================
+# Pentagon Project - Combined .gitignore (.NET Backend + Angular UI)
+# ====================================================================
+
+# --------------------------------------------------------------------
+# 1. OS & IDE Specific Files
+# --------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# JetBrains IDEs (Rider, WebStorm)
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Visual Studio
+.vs/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# --------------------------------------------------------------------
+# 2. .NET Core & EF Core (Backend)
+# --------------------------------------------------------------------
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# SQLite databases & temp files
+*.db-shm
+*.db-wal
+# Note: Keep the seeded retail_ordering.db in source control if intended,
+# but ignore lock files or other local db modifications.
+# retail_ordering.db
+
+# EF Core migrations / tool files
+.dotnet/
+.tools/
+
+# Publish output
+/publish/
+
+# --------------------------------------------------------------------
+# 3. Node.js & Angular (Frontend)
+# --------------------------------------------------------------------
+# Dependency directories
+node_modules/
+/jspm_packages/
+
+# Build outputs
+/dist/
+/.angular/
+.angular-errors/
+
+# Temp / Cache / Log files
+.npm/
+.eslintcache
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --------------------------------------------------------------------
+# 4. Custom Scripts & Local Environment
+# --------------------------------------------------------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+test_auth.ps1
+*.ps1.log

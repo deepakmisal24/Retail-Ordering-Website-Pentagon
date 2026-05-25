@@ -1,0 +1,159 @@
+<div class="app-container">
+  <!-- 1. STUNNING NAVIGATION SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      🍕 <span>Slice & Sip</span>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <li>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item-link">
+          🏠 Home Welcome
+        </a>
+      </li>
+      <li>
+        <a routerLink="/menu" routerLinkActive="active" class="nav-item-link">
+          🍕 Order Menu
+        </a>
+      </li>
+      <li *ngIf="authService.isAuthenticated">
+        <a routerLink="/checkout" routerLinkActive="active" class="nav-item-link">
+          💳 Secure Checkout
+        </a>
+      </li>
+      <li *ngIf="authService.isAuthenticated">
+        <a routerLink="/orders" routerLinkActive="active" class="nav-item-link">
+          📜 Order History
+        </a>
+      </li>
+      <li *ngIf="authService.isAuthenticated && authService.isAdmin">
+        <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item-link">
+          👑 Admin Manager
+        </a>
+      </li>
+    </nav>
+
+    <!-- SIDEBAR FOOTER PROFILE -->
+    <div class="sidebar-footer">
+      <div *ngIf="!(authService.customer$ | async)" class="profile-auth-prompt">
+        <p class="text-secondary text-xs">Unlock checkout privileges:</p>
+        <a routerLink="/auth/login" class="btn-premium btn-sm-block mt-2">Sign In</a>
+      </div>
+
+      <div *ngIf="(authService.customer$ | async) as customer" class="profile-logged-in">
+        <div class="profile-info-block">
+          <strong class="username-display">{{ customer.username }}</strong>
+          <span class="role-badge" [class.admin]="customer.role === 'Admin'">{{ customer.role }}</span>
+          <span class="loyalty-display" *ngIf="customer.role !== 'Admin'">🪙 {{ customer.loyaltyPoints }} loyalty pts</span>
+        </div>
+        <button class="btn-premium-outline btn-sm-block mt-3" (click)="handleLogout()">
+          🚪 Sign Out
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN WRAPPER -->
+  <div class="main-layout-wrapper">
+    <!-- 2. TOP HEADER NAVBAR -->
+    <header class="top-navbar">
+      <div class="top-navbar-title">
+        <h2>Artisan Pizzeria Portal</h2>
+      </div>
+
+      <div class="top-navbar-actions">
+        <!-- QUICK STAT OR WELCOME -->
+        <div *ngIf="(authService.customer$ | async) as customer" class="welcome-top">
+          Hello, <strong class="text-accent">{{ customer.username }}</strong>!
+        </div>
+
+        <!-- CART BUTTON -->
+        <button class="btn-premium-outline cart-toggle-btn" (click)="toggleDrawer()">
+          🛒 Basket 
+          <span class="cart-count-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 3. MAIN ROUTING VIEWPORT -->
+    <main class="main-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>
+
+<!-- 4. SLIDING CART DRAWER BACKDROP -->
+<div 
+  class="cart-drawer-backdrop" 
+  [class.active]="isDrawerOpen" 
+  (click)="toggleDrawer()"
+></div>
+
+<!-- 5. SLIDING CART DRAWER -->
+<div class="cart-drawer" [class.open]="isDrawerOpen">
+  <div class="cart-header">
+    <h2>Your Basket ({{ cartCount }})</h2>
+    <button class="close-btn" (click)="toggleDrawer()">×</button>
+  </div>
+
+  <div class="cart-items-container">
+    <div *ngFor="let item of cartItems" class="cart-item">
+      <div class="cart-item-info">
+        <strong>{{ item.product.name }}</strong>
+        <p class="cart-item-custom">Size: {{ item.selectedSize }}</p>
+        <p class="cart-item-custom text-accent" *ngIf="item.selectedToppings !== 'None'">+ Toppings: {{ item.selectedToppings }}</p>
+        <p class="cart-item-custom text-muted">Pkg: {{ item.selectedPackagingName }}</p>
+        <span class="cart-item-price">\${{ (item.unitPrice * item.quantity).toFixed(2) }}</span>
+      </div>
+
+      <div class="cart-item-actions">
+        <div class="qty-adjust">
+          <button type="button" class="qty-btn" (click)="adjustItemQty(item, -1)">-</button>
+          <span class="qty-display">{{ item.quantity }}</span>
+          <button type="button" class="qty-btn" (click)="adjustItemQty(item, 1)">+</button>
+        </div>
+        
+        <button class="remove-item-btn" (click)="removeItem(item)">🗑️</button>
+      </div>
+    </div>
+
+    <!-- EMPTY CART STATE -->
+    <div *ngIf="cartItems.length === 0" class="empty-cart-drawer">
+      <p>🍕 Your basket is currently empty.</p>
+      <a routerLink="/menu" class="btn-premium mt-3" (click)="toggleDrawer()">Order Pizza Now</a>
+    </div>
+  </div>
+
+  <div class="cart-footer" *ngIf="cartItems.length > 0">
+    <div class="cart-total-row">
+      <span>Subtotal:</span>
+      <strong>\${{ cartSubtotal.toFixed(2) }}</strong>
+    </div>
+    
+    <div class="cart-drawer-actions">
+      <button 
+        class="btn-premium glow-btn w-full"
+        (click)="proceedToCheckout()"
+      >
+        Proceed to Secure Checkout
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 6. TOAST NOTIFICATIONS OVERLAY FEED -->
+<div class="toast-feed">
+  <div 
+    *ngFor="let toast of toasts" 
+    class="toast-message" 
+    [ngClass]="toast.type"
+  >
+    <span class="toast-icon">
+      <span *ngIf="toast.type === 'success'">✓</span>
+      <span *ngIf="toast.type === 'danger'">⚠️</span>
+      <span *ngIf="toast.type === 'info'">ℹ️</span>
+    </span>
+    <span class="toast-text">{{ toast.message }}</span>
+    <button class="toast-close" (click)="toastService.dismiss(toast.id)">×</button>
+  </div>
+</div>
