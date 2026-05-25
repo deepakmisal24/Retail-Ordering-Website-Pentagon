@@ -16,12 +16,9 @@ interface OrderHistoryItem {
   couponCode: string;
   redeemedLoyaltyPoints: number;
   earnedLoyaltyPoints: number;
-  shippingAddressStreet: string;
-  shippingAddressCity: string;
-  shippingAddressZipCode: string;
-  selectedPackagingName: string;
-  selectedPackagingPrice: number;
-  selectedPackagingDescription: string;
+  shippingAddress: string;
+  packagingName: string;
+  packagingPrice: number;
   orderItems: {
     id: number;
     productId: number;
@@ -103,8 +100,8 @@ interface OrderHistoryItem {
           <!-- CARD FOOTER: BREAKDOWN & DELIVERY -->
           <div class="order-footer-details">
             <div class="delivery-details">
-              <span>📍 <strong>Deliver To:</strong> {{ order.shippingAddressStreet }}, {{ order.shippingAddressCity }}</span>
-              <span>📦 <strong>Packaging:</strong> {{ order.selectedPackagingName }} (₹{{ order.selectedPackagingPrice.toFixed(2) }})</span>
+              <span>📍 <strong>Deliver To:</strong> {{ order.shippingAddress }}</span>
+              <span>📦 <strong>Packaging:</strong> {{ order.packagingName }} (₹{{ order.packagingPrice.toFixed(2) }})</span>
             </div>
 
             <div class="pricing-breakdown">
@@ -434,8 +431,8 @@ export class OrdersComponent implements OnInit {
     this.reorderingId = order.id;
     this.toastService.showInfo(`Initiating quick reorder for receipt #${order.id}...`);
 
-    // Call the backend endpoint with address query parameters
-    const url = `http://localhost:5000/api/orders/reorder/${order.id}?street=${encodeURIComponent(order.shippingAddressStreet)}&city=${encodeURIComponent(order.shippingAddressCity)}&zipCode=${encodeURIComponent(order.shippingAddressZipCode)}`;
+    // Call the backend endpoint to reuse past order details automatically
+    const url = `http://localhost:5000/api/orders/reorder/${order.id}`;
 
     this.http.post<any>(url, {}).subscribe({
       next: (res) => {
