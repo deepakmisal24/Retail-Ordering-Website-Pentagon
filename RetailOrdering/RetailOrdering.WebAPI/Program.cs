@@ -98,12 +98,12 @@ builder.Services.AddAuthentication(options =>
 // 7. Authorization Policies
 builder.Services.AddAuthorization();
 
-// 8. Configure CORS (Permissive for local Angular dev port 4200)
+// 8. Configure CORS (Permissive for local Angular dev port 4200 and 58068)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularDev", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins("http://localhost:4200", "http://localhost:58068")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();

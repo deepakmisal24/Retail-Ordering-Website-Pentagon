@@ -8,6 +8,7 @@ namespace RetailOrdering.Application.DTOs
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public string CustomerUsername { get; set; } = string.Empty;
+        public string CustomerEmail { get; set; } = string.Empty;
         public DateTime OrderDate { get; set; }
         public decimal SubTotal { get; set; }
         public string CouponCode { get; set; } = string.Empty;
@@ -17,6 +18,10 @@ namespace RetailOrdering.Application.DTOs
         public string PackagingName { get; set; } = string.Empty;
         public decimal PackagingPrice { get; set; }
         public string ShippingAddress { get; set; } = string.Empty;
+        public string ShippingAddressStreet { get; set; } = string.Empty;
+        public string ShippingAddressCity { get; set; } = string.Empty;
+        public string ShippingAddressZipCode { get; set; } = string.Empty;
+        public string SelectedPackagingName { get; set; } = string.Empty;
         public decimal TotalAmount { get; set; }
         public int EarnedLoyaltyPoints { get; set; }
         public string OrderStatus { get; set; } = string.Empty;
@@ -29,6 +34,7 @@ namespace RetailOrdering.Application.DTOs
         public int ProductId { get; set; }
         public string ProductName { get; set; } = string.Empty;
         public string ProductImageUrl { get; set; } = string.Empty;
+        public string ProductCategory { get; set; } = string.Empty;
         public string SelectedSize { get; set; } = string.Empty;
         public string SelectedToppings { get; set; } = string.Empty;
         public int Quantity { get; set; }
